@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>結婚式のご招待</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Yu Mincho', 'YuMincho', 'Hiragino Mincho ProN', 'Hiragino Mincho Pro', 'MS PMincho', serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.8;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            font-weight: 300;
+            letter-spacing: 0.1em;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .slideshow-container {
+            width: 100%;
+            height: 400px;
+            position: relative;
+            border-bottom: 3px solid #667eea;
+            overflow: hidden;
+        }
+
+        .slide {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            animation: fadeIn 0.5s;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        .slide::before {
+            content: attr(data-label);
+            font-size: 1.5em;
+            color: #999;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .slide-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.8);
+            color: #667eea;
+            border: none;
+            padding: 15px 20px;
+            font-size: 1.5em;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s;
+            z-index: 10;
+        }
+
+        .slide-nav:hover {
+            background: rgba(255, 255, 255, 1);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .prev {
+            left: 20px;
+        }
+
+        .next {
+            right: 20px;
+        }
+
+        .slide-indicators {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .indicator.active {
+            background: white;
+            transform: scale(1.3);
+        }
+
+        .content {
+            padding: 60px 40px;
+        }
+
+        .names {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .names h2 {
+            font-size: 2em;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-weight: 400;
+        }
+
+        .names .divider {
+            width: 80px;
+            height: 2px;
+            background: #667eea;
+            margin: 20px auto;
+        }
+
+        .profile-section {
+            margin-bottom: 50px;
+        }
+
+        .profile-section h2 {
+            text-align: center;
+            color: #667eea;
+            font-size: 1.8em;
+            margin-bottom: 40px;
+            font-weight: 400;
+        }
+
+        .profiles {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .profile-card {
+            background: #f9f9f9;
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .profile-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%);
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        .profile-card h3 {
+            color: #667eea;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            font-weight: 400;
+        }
+
+        .profile-info {
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .profile-info p {
+            color: #666;
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .profile-info strong {
+            color: #667eea;
+            display: inline-block;
+            width: 80px;
+        }
+
+        .message {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 0 20px;
+            color: #555;
+        }
+
+        .message p {
+            margin-bottom: 20px;
+        }
+
+        .details {
+            background: #f9f9f9;
+            padding: 40px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+        }
+
+        .detail-item {
+            margin-bottom: 30px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .detail-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .detail-icon {
+            font-size: 1.5em;
+            margin-right: 15px;
+            min-width: 30px;
+        }
+
+        .detail-content h3 {
+            color: #667eea;
+            font-size: 1.1em;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .detail-content p {
+            color: #666;
+            line-height: 1.8;
+        }
+
+        .photo-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .photo-placeholder {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        .rsvp-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        .rsvp-section h3 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            font-weight: 400;
+        }
+
+        .rsvp-section p {
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+
+        .footer {
+            background: #f5f5f5;
+            padding: 30px 40px;
+            text-align: center;
+            color: #888;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .profiles {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .header p {
+                font-size: 1em;
+            }
+
+            .content {
+                padding: 40px 20px;
+            }
+
+            .details {
+                padding: 30px 20px;
+            }
+
+            .names h2 {
+                font-size: 1.5em;
+            }
+
+            .slideshow-container {
+                height: 250px;
+            }
+
+            .slide-nav {
+                padding: 10px 15px;
+                font-size: 1.2em;
+            }
+
+            .prev {
+                left: 10px;
+            }
+
+            .next {
+                right: 10px;
+            }
+
+            .photo-gallery {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .profile-info strong {
+                width: 70px;
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- ヘッダー -->
+        <div class="header">
+            <h1>Wedding Invitation</h1>
+            <p>結婚式のご案内</p>
+        </div>
+
+        <!-- スライドショー -->
+        <div class="slideshow-container">
+            <div class="slide active" data-label="📷 メイン写真 1">
+                <!-- ここにメイン写真1が入ります -->
+            </div>
+            <div class="slide" data-label="📷 メイン写真 2">
+                <!-- ここにメイン写真2が入ります -->
+            </div>
+            <div class="slide" data-label="📷 メイン写真 3">
+                <!-- ここにメイン写真3が入ります -->
+            </div>
+            <div class="slide" data-label="📷 メイン写真 4">
+                <!-- ここにメイン写真4が入ります -->
+            </div>
+
+            <button class="slide-nav prev" onclick="changeSlide(-1)">&#10094;</button>
+            <button class="slide-nav next" onclick="changeSlide(1)">&#10095;</button>
+
+            <div class="slide-indicators">
+                <span class="indicator active" onclick="currentSlide(0)"></span>
+                <span class="indicator" onclick="currentSlide(1)"></span>
+                <span class="indicator" onclick="currentSlide(2)"></span>
+                <span class="indicator" onclick="currentSlide(3)"></span>
+            </div>
+        </div>
+
+        <!-- コンテンツ -->
+        <div class="content">
+            <!-- 新郎新婦名 -->
+            <div class="names">
+                <h2>太郎 & 花子</h2>
+                <div class="divider"></div>
+            </div>
+
+            <!-- プロフィール -->
+            <div class="profile-section">
+                <h2>Profile</h2>
+                <div class="profiles">
+                    <!-- 新郎プロフィール -->
+                    <div class="profile-card">
+                        <div class="profile-image">新郎<br>写真</div>
+                        <h3>山田 太郎</h3>
+                        <div class="profile-info">
+                            <p><strong>生年月日：</strong>1995年4月1日</p>
+                            <p><strong>出身地：</strong>東京都</p>
+                            <p><strong>趣味：</strong>写真撮影、登山</p>
+                            <p><strong>好きな食べ物：</strong>ラーメン</p>
+                            <p><strong>一言：</strong>これから二人で幸せな家庭を築いていきます！</p>
+                        </div>
+                    </div>
+
+                    <!-- 新婦プロフィール -->
+                    <div class="profile-card">
+                        <div class="profile-image">新婦<br>写真</div>
+                        <h3>佐藤 花子</h3>
+                        <div class="profile-info">
+                            <p><strong>生年月日：</strong>1996年8月10日</p>
+                            <p><strong>出身地：</strong>神奈川県</p>
+                            <p><strong>趣味：</strong>料理、読書</p>
+                            <p><strong>好きな食べ物：</strong>スイーツ</p>
+                            <p><strong>一言：</strong>温かい家庭を築けるよう頑張ります！</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- メッセージ -->
+            <div class="message">
+                <p>謹啓 皆様におかれましては<br>ますますご清祥のこととお慶び申し上げます</p>
+                <p>このたび 私たちは結婚式を挙げることとなりました<br>
+                つきましては 日頃お世話になっております皆様に<br>
+                感謝の気持ちを込めて ささやかな披露宴を催したく存じます</p>
+                <p>ご多用中 誠に恐縮ではございますが<br>
+                ぜひご出席賜りますよう お願い申し上げます</p>
+            </div>
+
+            <!-- 詳細情報 -->
+            <div class="details">
+                <div class="detail-item">
+                    <div class="detail-icon">📅</div>
+                    <div class="detail-content">
+                        <h3>日時</h3>
+                        <p>2026年6月15日（日）<br>
+                        挙式：午後2時00分〜<br>
+                        披露宴：午後3時00分〜</p>
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-icon">📍</div>
+                    <div class="detail-content">
+                        <h3>会場</h3>
+                        <p>〇〇ホテル 2階 バンケットルーム<br>
+                        〒100-0001<br>
+                        東京都千代田区〇〇1-2-3<br>
+                        TEL: 03-1234-5678</p>
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-icon">🚃</div>
+                    <div class="detail-content">
+                        <h3>アクセス</h3>
+                        <p>JR〇〇駅より徒歩5分<br>
+                        地下鉄〇〇線 〇〇駅より徒歩3分<br>
+                        ※お車でお越しの方は会場駐車場をご利用ください</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- フォトギャラリー -->
+            <div class="photo-gallery">
+                <div class="photo-placeholder">写真1</div>
+                <div class="photo-placeholder">写真2</div>
+                <div class="photo-placeholder">写真3</div>
+                <div class="photo-placeholder">写真4</div>
+            </div>
+
+            <!-- 出欠確認 -->
+            <div class="rsvp-section">
+                <h3>出欠のご連絡</h3>
+                <p>お手数ではございますが<br>
+                2026年5月10日までに<br>
+                下記までご連絡くださいますようお願い申し上げます</p>
+                <p><strong>連絡先</strong><br>
+                メール: wedding@example.com<br>
+                電話: 090-1234-5678</p>
+            </div>
+        </div>
+
+        <!-- フッター -->
+        <div class="footer">
+            <p>令和8年6月吉日</p>
+            <p>山田太郎・佐藤花子</p>
+        </div>
+    </div>
+
+    <script>
+        let currentSlideIndex = 0;
+        let slideInterval;
+
+        // スライドショーを開始
+        function startSlideshow() {
+            slideInterval = setInterval(() => {
+                changeSlide(1);
+            }, 4000); // 4秒ごとに自動切り替え
+        }
+
+        // スライドを変更
+        function changeSlide(direction) {
+            const slides = document.querySelectorAll('.slide');
+            const indicators = document.querySelectorAll('.indicator');
+
+            // 現在のスライドを非表示
+            slides[currentSlideIndex].classList.remove('active');
+            indicators[currentSlideIndex].classList.remove('active');
+
+            // 新しいインデックスを計算
+            currentSlideIndex += direction;
+
+            if (currentSlideIndex >= slides.length) {
+                currentSlideIndex = 0;
+            } else if (currentSlideIndex < 0) {
+                currentSlideIndex = slides.length - 1;
+            }
+
+            // 新しいスライドを表示
+            slides[currentSlideIndex].classList.add('active');
+            indicators[currentSlideIndex].classList.add('active');
+
+            // 自動再生をリセット
+            clearInterval(slideInterval);
+            startSlideshow();
+        }
+
+        // 特定のスライドに移動
+        function currentSlide(index) {
+            const slides = document.querySelectorAll('.slide');
+            const indicators = document.querySelectorAll('.indicator');
+
+            slides[currentSlideIndex].classList.remove('active');
+            indicators[currentSlideIndex].classList.remove('active');
+
+            currentSlideIndex = index;
+
+            slides[currentSlideIndex].classList.add('active');
+            indicators[currentSlideIndex].classList.add('active');
+
+            // 自動再生をリセット
+            clearInterval(slideInterval);
+            startSlideshow();
+        }
+
+        // ページ読み込み時にスライドショーを開始
+        window.addEventListener('load', () => {
+            startSlideshow();
+        });
+    </script>
+</body>
+</html>
